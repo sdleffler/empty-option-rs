@@ -44,6 +44,8 @@
 //! Calling `.steal()` on a `None` immediately panics:
 //!
 //! ```rust,should_panic
+//! use empty_option::EmptyOptionExt;
+//!
 //! let mut thing = None;
 //! 
 //! // Panics here!
@@ -97,6 +99,8 @@
 //! Calling `steal_mut` on a `None` immediately panics:
 //!
 //! ```rust,should_panic
+//! use empty_option::EmptyOptionExt;
+//!
 //! let mut thing: Option<i32> = None;
 //! 
 //! // Panics here!
@@ -166,6 +170,8 @@ pub trait EmptyOptionExt {
 /// Calling `.steal()` on a `None` immediately panics:
 ///
 /// ```rust,should_panic
+/// use empty_option::EmptyOptionExt;
+///
 /// let mut thing = None;
 /// 
 /// // Panics here!
@@ -244,6 +250,8 @@ impl<'a, T> OptionGuard<'a, T> {
 /// Calling `steal_mut` on a `None` immediately panics:
 ///
 /// ```rust,should_panic
+/// use empty_option::EmptyOptionExt;
+///
 /// let mut thing: Option<i32> = None;
 /// 
 /// // Panics here!
