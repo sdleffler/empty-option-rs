@@ -1,0 +1,19 @@
+[package]
+name = "empty-option"
+version = "0.1.0"
+authors = ["Sean Leffler <sean@errno.com>"]
+
+description = """
+Convenient wrappers for taking/replacing values from mutable references to `Option`s and enforcing invariants.
+"""
+
+documentation = "https://docs.rs/empty-option"
+homepage = "https://github.com/sdleffler/empty-option-rs"
+repository = "https://github.com/sdleffler/empty-option-rs"
+
+readme = "README.md"
+keywords = ["option", "move", "take", "replace", "reuse"]
+categories = ["rust-patterns"]
+
+[badges]
+travis-ci = { repository = "sdleffler/empty-option-rs" }
