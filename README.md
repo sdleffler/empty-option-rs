@@ -15,7 +15,8 @@ Using `EmptyOptionExt::steal` on an `&mut Option<T>` produces the `T` from the o
 Calling `guard.restore()` puts the stolen value back into the original option:
 
 ```rust
-# use empty_option::EmptyOptionExt;
+use empty_option::EmptyOptionExt;
+
 // A mutable option, from which we shall steal a value!
 let mut thing = Some(5);
 
@@ -37,7 +38,8 @@ assert_eq!(thing, Some(6));
 But, if the guard is dropped instead, a runtime panic results.
 
 ```rust,should_panic
-# use empty_option::EmptyOptionExt;
+use empty_option::EmptyOptionExt;
+
 let mut thing = Some(5);
 
 let (_, _) = thing.steal();
@@ -53,8 +55,9 @@ Using `EmptyOptionExt::steal_mut` on an `&mut Option<T>` produces an `OptionGuar
 
 Take a value from an option, which is automatically returned:
 
-```
-# use empty_option::EmptyOptionExt;
+```rust
+use empty_option::EmptyOptionExt;
+
 let mut thing = Some(5);
 
 {
@@ -70,8 +73,9 @@ assert_eq!(thing, Some(6));
 
 If the guard is consumed, the value is never returned.
 
-```
-# use empty_option::EmptyOptionExt;
+```rust
+use empty_option::EmptyOptionExt;
+
 let mut thing = Some(5);
 
 {
@@ -83,8 +87,6 @@ let mut thing = Some(5);
 
 assert_eq!(thing, None);
 ```
-
-
 
 ## License
 
