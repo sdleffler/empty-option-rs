@@ -15,5 +15,7 @@ readme = "README.md"
 keywords = ["option", "move", "take", "replace", "reuse"]
 categories = ["rust-patterns"]
 
+license = "MIT/Apache-2.0"
+
 [badges]
 travis-ci = { repository = "sdleffler/empty-option-rs" }
