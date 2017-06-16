@@ -40,6 +40,17 @@
 //! 
 //! // Never return the value!
 //! ```
+//!
+//! Calling `.steal()` on a `None` immediately panics:
+//!
+//! ```rust,should_panic
+//! let mut thing = None;
+//! 
+//! // Panics here!
+//! let (guard, _) = thing.steal();
+//! 
+//! guard.restore(5);
+//! ```
 //! 
 //! ## `OptionGuardMut`
 //! 
@@ -80,6 +91,16 @@
 //! }
 //! 
 //! assert_eq!(thing, None);
+//!
+//! ```
+//! 
+//! Calling `steal_mut` on a `None` immediately panics:
+//!
+//! ```rust,should_panic
+//! let mut thing: Option<i32> = None;
+//! 
+//! // Panics here!
+//! thing.steal_mut();
 //! ```
 
 use std::mem;
@@ -91,10 +112,11 @@ pub trait EmptyOptionExt {
     type Inner;
 
     /// Take a value out of an option, providing a guard which panics if the value is not returned.
+    /// Panics on `None`.
     fn steal(&mut self) -> (OptionGuard<Self::Inner>, Self::Inner);
 
     /// Take a value out of an option, providing a guard which returns the value unless consumed by
-    /// `OptionGuardMut::into_inner`.
+    /// `OptionGuardMut::into_inner`. Panics on `None`.
     fn steal_mut<'a>(&'a mut self) -> OptionGuardMut<'a, Self::Inner>;
 }
 
@@ -139,6 +161,17 @@ pub trait EmptyOptionExt {
 /// let (_, _) = thing.steal();
 /// 
 /// // Never return the value!
+/// ```
+///
+/// Calling `.steal()` on a `None` immediately panics:
+///
+/// ```rust,should_panic
+/// let mut thing = None;
+/// 
+/// // Panics here!
+/// let (guard, _) = thing.steal();
+/// 
+/// guard.restore(5);
 /// ```
 pub struct OptionGuard<'a, T: 'a> {
     opt: &'a mut Option<T>,
@@ -207,6 +240,15 @@ impl<'a, T> OptionGuard<'a, T> {
 /// 
 /// assert_eq!(thing, None);
 /// ```
+///
+/// Calling `steal_mut` on a `None` immediately panics:
+///
+/// ```rust,should_panic
+/// let mut thing: Option<i32> = None;
+/// 
+/// // Panics here!
+/// thing.steal_mut();
+/// ```
 pub struct OptionGuardMut<'a, T: 'a> {
     origin: &'a mut Option<T>,
     value: Option<T>,
@@ -253,7 +295,7 @@ impl<T> EmptyOptionExt for Option<T> {
     }
 
     fn steal_mut(&mut self) -> OptionGuardMut<T> {
-        let value = self.take();
+        let value = Some(self.take().expect("attempted to steal from None"));
 
         OptionGuardMut {
             origin: self,
@@ -293,6 +335,16 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn catch_from_none() {
+        let mut thing = None;
+
+        let (guard, _) = thing.steal();
+
+        guard.restore(5);
+    }
+
+    #[test]
     fn mut_and_release() {
         let mut thing = Some(5);
 
@@ -319,5 +371,13 @@ mod tests {
         }
 
         assert_eq!(thing, None);
+    }
+
+    #[test]
+    #[should_panic]
+    fn mut_from_none() {
+        let mut thing: Option<i32> = None;
+
+        thing.steal_mut();
     }
 }

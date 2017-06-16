@@ -47,6 +47,17 @@ let (_, _) = thing.steal();
 // Never return the value!
 ```
 
+Calling `.steal()` on a `None` immediately panics:
+
+```rust,should_panic
+let mut thing = None;
+
+// Panics here!
+let (guard, _) = thing.steal();
+
+guard.restore(5);
+```
+
 ## `OptionGuardMut`
 
 Using `EmptyOptionExt::steal_mut` on an `&mut Option<T>` produces an `OptionGuardMut`, which dereferences to a `T`. To get the inner value out, `OptionGuardMut::into_inner` can be called. On `Drop`, if the `OptionGuardMut` is not consumed with `OptionGuardMut::into_inner`, the value in the `OptionGuardMut` will be returned to the `Option` that it was borrowed from.
@@ -86,6 +97,15 @@ let mut thing = Some(5);
 }
 
 assert_eq!(thing, None);
+```
+
+Calling `steal_mut` on a `None` immediately panics:
+
+```rust,should_panic
+let mut thing: Option<i32> = None;
+
+// Panics here!
+thing.steal_mut();
 ```
 
 ## License
